@@ -34,9 +34,6 @@ def move(PieceFrom, PieceTo):
     # GameDebug(StringBuilder("PieceFrom Move: ", PieceFrom.getcharacter(), " ", PieceFrom.getx(), " ", PieceFrom.gety()))
     # GameDebug(StringBuilder("PieceTo Move: ", PieceTo.getcharacter(), " ", PieceTo.getx(), " ", PieceTo.gety()))
 
-
-
-
     temp = copy.copy(PieceFrom)
     # PieceFrom = copy.copy(PieceTo)
     # PieceTo = copy.copy(temp)
@@ -944,20 +941,10 @@ def CheckKing(king,i,j):
                             return False
     return True
 
-def main():
-
-    # file=open("Chess/GameDebug.txt","w")
-    file = open("GameDebug.txt", "w")
-    file.close()
-
-    #Variables
-    movelog=[]
-    GameOver=0
-    while GameOver==0:
-        #White Turn
-        PrintBoard()
-        GetMove("W")
-        checklist = inCheck("W").getAttacker()
+def Checkmate(color):
+        opposite = "B" if (color=="W")  else "W"
+        checklist = inCheck(color).getAttacker()
+        defenderList = []
         if len(checklist)!=0:
             GameDebug("Check")
             for item in checklist:
@@ -975,7 +962,7 @@ def main():
                     #Get the coords of the attacking piece
                     [attacker_x, attacker_y] = item.getLocation()
                     #Get the coords of the king
-                    [king_x, king_y] = inCheck("W").getLocation()
+                    [king_x, king_y] = inCheck(color).getLocation()
                     #Return a list of the tiles between the two
                     GameDebug(StringBuilder("Attacker: ", attacker_x, " ", attacker_y))
                     GameDebug(StringBuilder("King: ",king_x, " ", king_y))
@@ -1004,7 +991,8 @@ def main():
                         attacker_x -= change_x
                         attacker_y -= change_y
 
-                    #empylist has dictionaries inside of it
+                    newpossible = []
+                    #empylist has dictionaries inside of it which contain the piece and the x and y coords
                     for i in range(len(emptylist)):
                         empty = emptylist[i]["Piece"]
                         #Check for pieces that can block the check
@@ -1012,29 +1000,76 @@ def main():
                         GameDebug(StringBuilder("Empty: ", empty.getcharacter(), " ", emptylist[i]["x"], " ", emptylist[i]["y"]))
                         possibleMoves = empty.spider()
                         if len(possibleMoves)!=0:
-                            newpossible = []
                             for i in range(len(possibleMoves)):
                                 possible = possibleMoves[i]
                                 #Once we have this list, we need to check if it can block
-                                if possible.getcolor() == "W":
+                                if possible.getcolor() == color:
                                     GameDebug("Opposite Color: " + possible.getcharacter() + " This piece can move to " + str(possible.getx()) + " " + str(possible.gety()) + " from " + str(emptylist[i]["x"]) + " " + str(emptylist[i]["y"]))
                                     newpossible.append({"Piece": possible, "x": emptylist[i]["x"], "y": emptylist[i]["y"]})
-                            if len(newpossible)!=0: #We have a list of pieces that can block the check
-                                GameDebug("Possible Moves")
-                                for new in newpossible:
-                                    GameDebug(StringBuilder("Piece: ", new["Piece"].getcharacter(), " ", new["x"], " ", new["y"]))
-                                    #If there are pieces that can block the check, then the king is not in checkmate
-                                    GameDebug("Not in Checkmate")
-                                    GameDebug("=====================================")
-                                    # break
-                            else:
-                                GameDebug("Checkmate?")
-                            #Now that we have a list of pieces which in theory blocks the check, we need to check that they block the check
                         else:
                             GameDebug("Empty List")
+                    if len(newpossible)!=0: #We have a list of pieces that can block the check
+                        GameDebug("Possible Moves")
+
+                        for new in newpossible:
+                            GameDebug(StringBuilder("Piece: ", new["Piece"].getcharacter(), " ", new["x"], " ", new["y"]))
+                            # Check if this move prevents the attack
+                            pieceFrom = new["Piece"]
+                            pieceTo = getPiece(new["x"], new["y"])
+                            move(pieceFrom, pieceTo)
+                            if len(inCheck(color).getAttacker())==0:
+                                #If the move does not prevent the attack, then it is not a valid move
+                                # We can break knowing that there is a move that can block the check
+                                GameDebug("We have reached this point in the code where something blocks the check")
+                                GameDebug("This is the piece that blocks the check: " + pieceTo.getcharacter() + " at " + str(pieceTo.getx()) + " " + str(pieceTo.gety()) + " from " + str(pieceFrom.getx()) + " " + str(pieceFrom.gety()))
+                                GameDebug("=====================================")
+                                move(pieceTo, pieceFrom)
+                                defenderList.append(pieceTo)
+                            else:
+                                move(pieceTo, pieceFrom)
+                                GameDebug("The move failed, iterating to next")
+                            #If there are pieces that can block the check, then the king is not in checkmate
+                            # break
+                        if len(defenderList)!=0:
+                            GameDebug("Defender List")
+                            for defender in defenderList:
+                                GameDebug(StringBuilder("Defender: ", defender.getcharacter(), " ", defender.getx(), " ", defender.gety()))
+                            return False
+                        else:
+                            GameDebug("Checkmate")
+                            GameDebug("=====================================")
+                            return True
+
+                    else:
+                        GameDebug("Checkmate?")
+                    #Now that we have a list of pieces which in theory blocks the check, we need to check that they block the check
+                    #If they do, then the king is not in checkmate
+                    
+
         else:
             GameDebug("There is no piece checking the king")
+            return False
+
+def main():
+
+    # file=open("Chess/GameDebug.txt","w")
+    file = open("GameDebug.txt", "w")
+    file.close()
+
+    #Variables
+    movelog=[]
+    GameOver=0
+    while GameOver==0:
+        #White Turn
         PrintBoard()
-        GetMove("B")
+        GetMove("W")
+        GameOver = Checkmate("W") + Checkmate("B")
+        if not GameOver:
+            PrintBoard()
+            GetMove("B")
+            GameOver = Checkmate("W") + Checkmate("B")
+
+    print("The Game is over!")
+
 
 main()
