@@ -12,6 +12,8 @@ e7e5
 a2a4
 d8h4
 a4a5
+g2g3
+h4xg3
 
 #Test 2: Scholars mate
 
