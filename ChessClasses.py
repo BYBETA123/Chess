@@ -60,8 +60,6 @@ def move(PieceFrom, PieceTo):
     PieceTo.hasMoved = True
     GameDebug(StringBuilder("The intern presentation 1: ", board[PieceFrom.y][PieceFrom.x].getcharacter()))
     GameDebug(StringBuilder("The intern presentation 2: ", board[PieceTo.y][PieceTo.x].getcharacter()))
-    # GameDebug(StringBuilder("Move1: ", PieceFrom.getcharacter(), " ", PieceFrom.getx(), " ", PieceFrom.gety()))
-    # GameDebug(StringBuilder("Move1: ", PieceTo.getcharacter(), " ", PieceTo.getx(), " ", PieceTo.gety()))
 
 class Piece:
     def __init__(self, character, value, x, y, color):
@@ -411,38 +409,10 @@ class Pawn(Piece):
     def __init__(self, x, y, color):
         super().__init__("P",1, x, y, color)
         self.enPassant = False
-
-    # def getPossibleMoves(self, requestTile):
-
-    #     if self.color == "W":
-    #         # piece is white
-    #         if not self.hasMoved:
-    #             if requestTile.x == self.x and requestTile.y == self.y-2:
-    #                 GameDebug("The Pawn located at " + self.x + " " + self.y + " and can move to " + requestTile.x + " " + requestTile.y)
-    #                 return True
-    #         else:
-    #             if requestTile.x == self.x and requestTile.y == self.y-1:
-    #                 GameDebug("The Pawn located at " + self.x + " " + self.y + " and can move to " + requestTile.x + " " + requestTile.y)
-    #                 return True
-    #     if self.color == "B":
-    #         #piec eis black
-    #         if not self.hasMoved:
-    #             if requestTile.x == self.x and requestTile.y == self.y+2:
-    #                 GameDebug("The Pawn located at " + self.x + " " + self.y + " and can move to " + requestTile.x + " " + requestTile.y)
-    #                 return True
-    #         else:
-    #             if requestTile.x == self.x and requestTile.y == self.y+1:
-    #                 GameDebug("The Pawn located at  " + self.x + " " + self.y + " and can move to " + requestTile.x + " " + requestTile.y)
-    #                 return True
-    #     #end of getPossibleMoves
-    #     #Block with en passant?
             
     def movecheck(self, tox, toy):
         #check if the pawn is moving in the correct direction
         GameDebug("--- Pawn: MoveCheck ---")
-        if tox!=self.x: # doesn't this prevent en passant?
-            GameDebug(StringBuilder("Pawn: MoveCheck: Pawn cannot move sideways"))
-            return False
         if self.color=="W":
             #piece is white
             GameDebug("White")
