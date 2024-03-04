@@ -114,7 +114,7 @@ class Piece:
             tempy-=1
             if self.tempConfig(tempx, tempy): # Out of Bounds
                 break
-            if getPiece(tempx,tempy).getcharacter()=="R" or getPiece(tempx,tempy).getcharacter()=="Q":
+            if (getPiece(tempx,tempy).getcharacter()[1]=="R" or getPiece(tempx,tempy).getcharacter()[1]=="Q") and getPiece(tempx, tempy).getcolor() != self.color:
                 GameDebug(StringBuilder("Attacking Piece Found: ",getPiece(tempx,tempy).getcharacter()))
                 checklist.append(getPiece(tempx,tempy))
                 break
@@ -128,7 +128,7 @@ class Piece:
             tempy+=1
             if self.tempConfig(tempx,tempy): # Out of Bounds
                 break
-            if getPiece(tempx,tempy).getcharacter()[1]=="R" or getPiece(tempx,tempy).getcharacter()[1]=="Q":
+            if (getPiece(tempx,tempy).getcharacter()[1]=="R" or getPiece(tempx,tempy).getcharacter()[1]=="Q") and getPiece(tempx, tempy).getcolor() != self.color:
                 GameDebug("Attacking Piece Found: " + getPiece(tempx,tempy).getcharacter())
                 checklist.append(getPiece(tempx,tempy))
                 break
@@ -142,7 +142,7 @@ class Piece:
             tempx-=1
             if self.tempConfig(tempx,tempy): # Out of Bounds
                 break
-            if getPiece(tempx,tempy).getcharacter()=="R" or getPiece(tempx,tempy).getcharacter()=="Q":
+            if (getPiece(tempx,tempy).getcharacter()[1]=="R" or getPiece(tempx,tempy).getcharacter()[1]=="Q") and getPiece(tempx, tempy).getcolor() != self.color:
                 GameDebug("Attacking Piece Found: " + getPiece(tempx,tempy).getcharacter())
                 checklist.append(getPiece(tempx,tempy))
                 break
@@ -156,7 +156,7 @@ class Piece:
             tempx+=1
             if self.tempConfig(tempx,tempy): # Out of Bounds
                 break
-            if getPiece(tempx,tempy).getcharacter()=="R" or getPiece(tempx,tempy).getcharacter()=="Q":
+            if (getPiece(tempx,tempy).getcharacter()[1]=="R" or getPiece(tempx,tempy).getcharacter()[1]=="Q") and getPiece(tempx, tempy).getcolor() != self.color:
                 GameDebug("Attacking Piece Found: " + getPiece(tempx,tempy).getcharacter())
                 checklist.append(getPiece(tempx,tempy))
                 break
@@ -172,11 +172,11 @@ class Piece:
             tempx-=1
             if self.tempConfig(tempx,tempy): # Out of Bounds
                 break
-            if getPiece(tempx,tempy).getcharacter()=="B" or getPiece(tempx,tempy).getcharacter()=="Q":
+            if (getPiece(tempx,tempy).getcharacter()[1]=="B" or getPiece(tempx,tempy).getcharacter()[1]=="Q") and getPiece(tempx, tempy).getcolor() != self.color:
                 GameDebug("Attacking Piece Found: " + getPiece(tempx,tempy).getcharacter())
                 checklist.append(getPiece(tempx,tempy))
                 break
-            if getPiece(tempx,tempy).getcharacter()=="P" and getPiece(tempx,tempy).getcolor()=="B":
+            if getPiece(tempx,tempy).getcharacter()[1]=="P" and getPiece(tempx,tempy).getcolor()=="B":
                 GameDebug("Attacking Piece Found: " + getPiece(tempx,tempy).getcharacter())
                 checklist.append(getPiece(tempx,tempy))
                 break
@@ -191,7 +191,7 @@ class Piece:
             tempx+=1
             if self.tempConfig(tempx,tempy): # Out of Bounds
                 break
-            if getPiece(tempx,tempy).getcharacter()[1]=="B" or getPiece(tempx,tempy).getcharacter()[1]=="Q":
+            if (getPiece(tempx,tempy).getcharacter()[1]=="B" or getPiece(tempx,tempy).getcharacter()[1]=="Q") and getPiece(tempx, tempy).getcolor()!=self.color:
                 GameDebug("Attacking Piece Found: " + getPiece(tempx,tempy).getcharacter())
                 checklist.append(getPiece(tempx,tempy))
                 break
@@ -210,11 +210,11 @@ class Piece:
             tempx-=1
             if self.tempConfig(tempx,tempy): # Out of Bounds
                 break
-            if getPiece(tempx,tempy).getcharacter()=="B" or getPiece(tempx,tempy).getcharacter()=="Q":
+            if (getPiece(tempx,tempy).getcharacter()[1]=="B" or getPiece(tempx,tempy).getcharacter()[1]=="Q") and getPiece(tempx, tempy).getcolor() != self.color:
                 GameDebug("Attacking Piece Found: " + getPiece(tempx,tempy).getcharacter())
                 checklist.append(getPiece(tempx,tempy))
                 break
-            if getPiece(tempx, tempy).getcharacter()=="P" and getPiece(tempx,tempy).getcolor()=="W":
+            if getPiece(tempx, tempy).getcharacter()[1]=="P" and getPiece(tempx,tempy).getcolor()=="W":
                 GameDebug("Attacking Piece Found: " + getPiece(tempx,tempy).getcharacter())
                 checklist.append(getPiece(tempx,tempy))
                 break
@@ -229,7 +229,7 @@ class Piece:
             tempx+=1
             if self.tempConfig(tempx,tempy): # Out of Bounds
                 break
-            if getPiece(tempx,tempy).getcharacter()[1]=="B" or getPiece(tempx,tempy).getcharacter()[1]=="Q":
+            if (getPiece(tempx,tempy).getcharacter()[1]=="B" or getPiece(tempx,tempy).getcharacter()[1]=="Q") and getPiece(tempx, tempy).getcolor() != self.color:
                 GameDebug("Attacking Piece Found: " + getPiece(tempx,tempy).getcharacter())
                 checklist.append(getPiece(tempx,tempy))
                 break
@@ -243,35 +243,35 @@ class Piece:
 
         #Knight
         if self.tempConfig(self.x+1,self.y+2)==False:
-            if getPiece(self.x+1,self.y+2).getcharacter()=="&":
+            if getPiece(self.x+1,self.y+2).getcharacter()[1]=="&" and getPiece(self.x+1, self.y+2).getcolor() != self.color:
                 GameDebug("Attacking Piece Found: " + getPiece(self.x+1,self.y+2).getcharacter())
                 checklist.append(getPiece(self.x+1,self.y+2))
         if self.tempConfig(self.x+1,self.y-2)==False:
-            if getPiece(self.x+1,self.y-2).getcharacter()=="&":
+            if getPiece(self.x+1,self.y-2).getcharacter()[1]=="&" and getPiece(self.x+1, self.y-2).getcolor() != self.color:
                 GameDebug("Attacking Piece Found: " + getPiece(self.x+1,self.y-2).getcharacter())
                 checklist.append(getPiece(self.x+1,self.y-2))
         if self.tempConfig(self.x-1,self.y+2)==False:
-            if getPiece(self.x-1,self.y+2).getcharacter()=="&":
+            if getPiece(self.x-1,self.y+2).getcharacter()[1]=="&" and getPiece(self.x-1, self.y+2).getcolor() != self.color:
                 GameDebug("Attacking Piece Found: " + getPiece(self.x-1,self.y+2).getcharacter())
                 checklist.append(getPiece(self.x-1,self.y+2))
         if self.tempConfig(self.x-1,self.y-2)==False:
-            if getPiece(self.x-1,self.y-2).getcharacter()=="&":
+            if getPiece(self.x-1,self.y-2).getcharacter()[1]=="&" and getPiece(self.x-1, self.y-2).getcolor() != self.color:
                 GameDebug("Attacking Piece Found: " + getPiece(self.x-1,self.y-2).getcharacter())
                 checklist.append(getPiece(self.x-1,self.y-2))
         if self.tempConfig(self.x+2,self.y+1)==False:
-            if getPiece(self.x+2,self.y+1).getcharacter()=="&":
+            if getPiece(self.x+2,self.y+1).getcharacter()[1]=="&" and getPiece(self.x+2, self.y+1).getcolor() != self.color:
                 GameDebug("Attacking Piece Found: " + getPiece(self.x+2,self.y+1).getcharacter())
                 checklist.append(getPiece(self.x+2,self.y+1))
         if self.tempConfig(self.x+2,self.y-1)==False:
-            if getPiece(self.x+2,self.y-1).getcharacter()=="&":
+            if getPiece(self.x+2,self.y-1).getcharacter()[1]=="&" and getPiece(self.x+2, self.y-1).getcolor() != self.color:
                 GameDebug("Attacking Piece Found: " + getPiece(self.x+2,self.y-1).getcharacter())
                 checklist.append(getPiece(self.x+2,self.y-1))
         if self.tempConfig(self.x-2,self.y+1)==False:
-            if getPiece(self.x-2,self.y+1).getcharacter()=="&":
+            if getPiece(self.x-2,self.y+1).getcharacter()[1]=="&" and getPiece(self.x-2, self.y+1).getcolor() != self.color:
                 GameDebug("Attacking Piece Found: " + getPiece(self.x-2,self.y+1).getcharacter())
                 checklist.append(getPiece(self.x-2,self.y+1))
         if self.tempConfig(self.x-2,self.y-1)==False:
-            if getPiece(self.x-2,self.y-1).getcharacter()=="&":
+            if getPiece(self.x-2,self.y-1).getcharacter()[1]=="&" and getPiece(self.x-2, self.y-1).getcolor() != self.color:
                 GameDebug("Attacking Piece Found: " + getPiece(self.x-2,self.y-1).getcharacter())
                 checklist.append(getPiece(self.x-2,self.y-1))
 
@@ -294,7 +294,7 @@ class Piece:
                 break
             if getPiece(tempx,tempy).getcharacter() != "++":
                 GameDebug(StringBuilder("Up: ",getPiece(tempx,tempy).getcharacter()))
-                if getPiece(tempx,tempy).movecheck(self.x,self.y):
+                if getPiece(tempx,tempy).movecheck(self.x,self.y, False):
                     Moveable.append(getPiece(tempx,tempy))
                 break
 
@@ -309,7 +309,7 @@ class Piece:
                 break
             if getPiece(tempx, tempy).getcharacter() != "++":
                 GameDebug(StringBuilder("Down: ", getPiece(tempx, tempy).getcharacter()))
-                if getPiece(tempx,tempy).movecheck(self.x,self.y):
+                if getPiece(tempx,tempy).movecheck(self.x,self.y, False):
                     Moveable.append(getPiece(tempx,tempy))
                 break
         #Left
@@ -322,7 +322,7 @@ class Piece:
                 break
             if getPiece(tempx, tempy).getcharacter() != "++":
                 GameDebug(StringBuilder("Left: ", getPiece(tempx, tempy).getcharacter()))
-                if getPiece(tempx,tempy).movecheck(self.x,self.y):
+                if getPiece(tempx,tempy).movecheck(self.x,self.y, False):
                     Moveable.append(getPiece(tempx,tempy))
                 break
         #Right
@@ -335,7 +335,7 @@ class Piece:
                 break
             if getPiece(tempx, tempy).getcharacter() != "++":
                 GameDebug(StringBuilder("Right: ", getPiece(tempx, tempy).getcharacter()))
-                if getPiece(tempx,tempy).movecheck(self.x,self.y):
+                if getPiece(tempx,tempy).movecheck(self.x,self.y, False):
                     Moveable.append(getPiece(tempx,tempy))
                 break
         #Up-Left
@@ -349,7 +349,7 @@ class Piece:
                 break
             if getPiece(tempx, tempy).getcharacter() != "++":
                 GameDebug(StringBuilder("Up-Left: ", getPiece(tempx, tempy).getcharacter()))
-                if getPiece(tempx,tempy).movecheck(self.x,self.y):
+                if getPiece(tempx,tempy).movecheck(self.x,self.y, False):
                     Moveable.append(getPiece(tempx,tempy))
                 break
         #Up-Right
@@ -363,7 +363,7 @@ class Piece:
                 break
             if getPiece(tempx, tempy).getcharacter() != "++":
                 GameDebug(StringBuilder("Up-Right: ", getPiece(tempx, tempy).getcharacter()))
-                if getPiece(tempx,tempy).movecheck(self.x,self.y):
+                if getPiece(tempx,tempy).movecheck(self.x,self.y, False):
                     Moveable.append(getPiece(tempx,tempy))
                 break
         #Down-Left
@@ -377,7 +377,7 @@ class Piece:
                 break
             if getPiece(tempx, tempy).getcharacter() != "++":
                 GameDebug(StringBuilder("Down-Left: ", getPiece(tempx, tempy).getcharacter()))
-                if getPiece(tempx,tempy).movecheck(self.x,self.y):
+                if getPiece(tempx,tempy).movecheck(self.x,self.y, False):
                     Moveable.append(getPiece(tempx,tempy))
                 break
         #Down-Right
@@ -391,7 +391,7 @@ class Piece:
                 break
             if getPiece(tempx, tempy).getcharacter() != "++":
                 GameDebug(StringBuilder("Down-Right: ", getPiece(tempx, tempy).getcharacter()))
-                if getPiece(tempx,tempy).movecheck(self.x,self.y):
+                if getPiece(tempx,tempy).movecheck(self.x,self.y, False):
                     Moveable.append(getPiece(tempx,tempy))
                 break
         GameDebug("Spider: End")
@@ -402,10 +402,7 @@ class Piece:
         if tempx<0 or tempx>7 or tempy<0 or tempy>7:
             return True
         return False
-
-    def movecheck(self, otherPiece):
-        pass # This method is left unimplemented intentionally
-    
+   
     def getPossibleMoves(self):
         pass # This method is left unimplemented intentionally
 
@@ -414,18 +411,20 @@ class Pawn(Piece):
         super().__init__("P",1, x, y, color)
         self.enPassant = False
             
-    def movecheck(self, tox, toy):
+    def movecheck(self, tox, toy, taking):
         #check if the pawn is moving in the correct direction
         GameDebug("--- Pawn: MoveCheck ---")
-        if self.x !=tox and self.y != toy and abs(tox-self.x)==1 and abs(toy-self.y)==1:
-            #if we are taking
-            GameDebug("Attempting to take")
-            if getPiece(tox, toy).color != self.color and getPiece(tox, toy).getcharacter() != "++":
-                GameDebug("The Pawn is trying to take the opposite color")
-                return True
-            return False
 
+        if taking:
+            if self.x !=tox and self.y != toy and abs(tox-self.x)==1 and abs(toy-self.y)==1:
+                #validate the take
+                GameDebug("Attempting to take")
+                if getPiece(tox, toy).color != self.color and getPiece(tox, toy).getcharacter() != "++":
+                    GameDebug("The Pawn is trying to take the opposite color")
+                    return True
+                return False
 
+        #Not taking
         if self.color=="W":
             #piece is white
             GameDebug("White")
@@ -450,7 +449,7 @@ class Pawn(Piece):
             if toy>=self.y:
                 GameDebug(StringBuilder("Pawn: MoveCheck: Pawn cannot move backwards"))
                 return False
-            if self.hasMoved==False:
+            if (self.y == 6):
                 if toy==self.y-2 and getPiece(self.x,self.y-2).getcharacter()=="++" and getPiece(self.x,self.y-1).getcharacter()=="++":
                     GameDebug(StringBuilder("Pawn: MoveCheck: Pawn can move 2 spaces"))
                     return True
@@ -459,6 +458,8 @@ class Pawn(Piece):
                 return True
 
             GameDebug("Nothing was hit?")
+            GameDebug(StringBuilder(self.hasMoved))
+            GameDebug("I'm here")
             return False
 
         if self.color=="B":
@@ -481,8 +482,8 @@ class Pawn(Piece):
                 GameDebug(StringBuilder("Pawn: MoveCheck: Pawn cannot move backwards"))
                 return False
     
-            if self.hasMoved==False:
-                if toy==self.y+2 and getPiece(self.x,self.y+1).getcharacter()=="++" and getPiece(self.x,self.y+1).getcharacter()=="++":
+            if self.y==1:
+                if toy==self.y+2 and getPiece(self.x,self.y+2).getcharacter()=="++" and getPiece(self.x,self.y+1).getcharacter()=="++":
                     GameDebug(StringBuilder("Pawn: MoveCheck: Pawn can move 2 spaces"))
                     return True
             if toy==self.y+1 and getPiece(self.x,self.y+1).getcharacter()=="++":
@@ -496,57 +497,7 @@ class Rook(Piece):
     def __init__(self, x, y, color):
         super().__init__("R",5, x, y, color)
 
-    # def getPossibleMoves(self, requestTile):
-    #     #Returns a list of all possible moves for the rook
-    #     #Tile is a variable that indicates the square to move to
-    #     #Up
-    #     tempx = self.x
-    #     tempy = self.y
-    #     while (tempy>=0):
-    #         tempy-=1
-    #         if self.tempConfig(tempx,tempy):
-    #             break
-    #         if getPiece(tempx,tempy).getcharacter()!="++":
-    #             if getPiece(tempx,tempy).x==requestTile.x and getPiece(tempx,tempy).y==requestTile.y:
-    #                 GameDebug("The Rook is located at " + self.x + " " + self.y + " and can move to " + requestTile.x + " " + requestTile.y)
-    #                 return True
-    #             break
-
-    #     #Down
-    #     tempx = self.x
-    #     tempy = self.y
-    #     while (tempy<8):
-    #         tempy+=1
-    #         if self.tempConfig(tempx, tempy):
-    #             break
-    #         if getPiece(tempx,tempy).getcharacter()!="++":
-    #             if getPiece(tempx, tempy).x==requestTile.x and getPiece(tempx,tempy).y==requestTile.y:
-    #                 GameDebug("The Rook is located at " + self.x + " " + self.y + " and can move to " + requestTile.x + " " + requestTile.y)
-    #                 return True
-    #     #Left
-    #     tempx = self.x
-    #     tempy = self.y
-    #     while(tempx>=0):
-    #         tempx-=1
-    #         if self.tempConfig(tempx, tempy):
-    #             break
-    #         if getPiece(tempx,tempy).getcharacter()!="++":
-    #             if getPiece(tempx,tempy).x==requestTile.x and getPiece(tempx,tempy).y==requestTile.y:
-    #                 GameDebug("The Rook is located at " + self.x + " " + self.y + " and can move to " + requestTile.x + " " + requestTile.y)
-    #                 return True
-    #     #Right
-    #     tempx = self.x
-    #     tempy = self.y
-    #     while(tempx<8):
-    #         tempx+=1
-    #         if self.tempConfig(tempx,tempy):
-    #             break
-    #         if getPiece(tempx,tempy).getcharacter()!="++":
-    #             if getPiece(tempx,tempy).x==requestTile.x and getPiece(tempx,tempy).y==requestTile.y:
-    #                 GameDebug("The Rook is located at " + self.x + " " + self.y + " and can move to " + requestTile.x + " " + requestTile.y)
-    #                 return True
-
-    def movecheck(self, tox, toy):
+    def movecheck(self, tox, toy, taking):
         global board
 
         if (tox!=self.x and toy!=self.y) or (tox==self.x and toy==self.y):
@@ -617,12 +568,12 @@ class Knight(Piece):
     #         GameDebug("The Knight is located at " + self.x + " " + self.y + " and can move to " + requestTile.x + " " + requestTile.y)
     #         return True
 
-    def movecheck(self, tox, toy):
+    def movecheck(self, tox, toy, taking):
 
-        if abs(tox-self.x)==2 and abs(toy-self.y)==1 and getPiece(tox,toy).getcharacter()=="++":
+        if abs(tox-self.x)==2 and abs(toy-self.y)==1 and ((getPiece(tox,toy).getcharacter()=="++") ^ taking):
             GameDebug(StringBuilder("Knight: MoveCheck: Knight can move"))
             return True
-        if abs(tox-self.x)==1 and abs(toy-self.y)==2 and getPiece(tox,toy).getcharacter()=="++":
+        if abs(tox-self.x)==1 and abs(toy-self.y)==2 and ((getPiece(tox,toy).getcharacter()=="++") ^ taking):
             GameDebug(StringBuilder("Knight: MoveCheck: Knight can move"))
             return True
         GameDebug(StringBuilder("Knight: MoveCheck: Knight cannot move"))
@@ -632,7 +583,7 @@ class Bishop(Piece):
     def __init__(self, x, y, color):
         super().__init__("B",3, x, y, color)
 
-    def movecheck(self, tox, toy):
+    def movecheck(self, tox, toy, taking):
         tempx=self.x
         tempy=self.y
 
@@ -667,10 +618,7 @@ class Queen(Piece):
     def __init__(self, x, y, color):
         super().__init__("Q",9, x, y, color)
     
-    def getPossibleMoves(self, requestTile):
-        pass
-    
-    def movecheck(self,tox,toy):
+    def movecheck(self,tox,toy, taking):
 
         tempx=self.x
         tempy=self.y
@@ -747,20 +695,19 @@ class King(Piece):
     def __init__(self, x, y, color):
         super().__init__("K",100, x, y, color)
 
-    def getPossibloeMoves(self, requestTile):
-        pass
-
-    def movecheck(self,tox,toy):
-        if abs(tox-self.x)>1 or abs(toy-self.y)>1 or getPiece(tox,toy).getcharacter()!="++":
-            GameDebug(StringBuilder("King: MoveCheck: King cannot move"))
-            return False
+    def movecheck(self, tox, toy, taking):
+        if abs(tox-self.x)>1 or abs(toy-self.y)>1:
+            #Moving appropriately
+            if not(taking ^ (getPiece(tox, toy).getcharacter()=="++")):
+                GameDebug(StringBuilder("King: MoveCheck: King cannot move"))
+                return False
         return True
 
 class Empty(Piece):
     def __init__(self, x, y, color):
         super().__init__("+",0, x, y, color)
 
-    def movecheck(self,tox,toy):
+    def movecheck(self, tox, toy, taking):
         GameDebug("Empty: MoveCheck: Empty cannot move")
         return False
 
@@ -831,7 +778,7 @@ def ConfirmMove(firstx,firsty,secondx,secondy,color, taking):
         return False
     #Now we have passed all the checks, just making sure that the move will be done coorectly
     GameDebug(StringBuilder("Move Check: ", pieceFrom.getcharacter(), " ", pieceTo.getcharacter()))
-    if pieceFrom.movecheck(alphaChar(secondx),8-int(secondy))==False:
+    if pieceFrom.movecheck(alphaChar(secondx),8-int(secondy), taking)==False:
         #The piece cannot move like that
         GameDebug(StringBuilder("Validate Move: Invalid Move: ",pieceFrom.getcharacter()," cannot move like that"))
         return False
