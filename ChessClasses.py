@@ -18,6 +18,7 @@ def PrintBoard():
         print(8-i, end = " ")
         for j in range(8):
             getPiece(j,i).printcharacter()
+            # getPiece(j,i).printType()
         print("")
     print("  aa bb cc dd ee ff gg hh")
 
@@ -75,6 +76,9 @@ class Piece:
     
     def printcharacter(self):
         print(self.getcharacter(), end=" ")
+
+    def printType(self):
+        print(type(self).__name__, end = " ")
 
     def getvalue(self):
         return self.value
@@ -413,10 +417,13 @@ class Pawn(Piece):
     def movecheck(self, tox, toy):
         #check if the pawn is moving in the correct direction
         GameDebug("--- Pawn: MoveCheck ---")
+        if self.x !=tox:
+            GameDebug("Pawn cannot move sideways")
+            return False
+
         if self.color=="W":
             #piece is white
             GameDebug("White")
-
             if toy==self.y-1 and getPiece(self.x,self.y-1).getcharacter()!="++":
                 #check for en passant
                 if getPiece(self.x-1,self.y-1).getcharacter()!="++":
@@ -424,16 +431,19 @@ class Pawn(Piece):
                         if getPiece(self.x-1,self.y-1).getcharacter()[1]=="P":
                             if getPiece(self.x-1,self.y-1).gethasMoved()==True:
                                 GameDebug(StringBuilder("White Pawn: MoveCheck: En Passant Success Left"))
+                                self.enPassant= True
                                 return True
                 if getPiece(self.x+1,self.y-1).getcharacter()!="++":
                     if getPiece(self.x+1,self.y-1).getcolor()!=self.color:
                         if getPiece(self.x+1,self.y-1).getcharacter()[1]=="P":
                             if getPiece(self.x+1,self.y-1).gethasMoved()==True:
                                 GameDebug(StringBuilder("White Pawn: MoveCheck: En Passant Success Right"))
+                                self.enPassant=True
                                 return True
 
-            GameDebug(StringBuilder("White Pawn: MoveCheck: ", toy, " ", self.y))
-            GameDebug(StringBuilder("White Pawn: MoveCheck: ", tox, " ", self.x))
+            GameDebug(StringBuilder("White Pawn: MoveCheck: ", toy, " to ", self.y))
+            GameDebug(StringBuilder("White Pawn: MoveCheck: ", tox, " to ", self.x))
+
             if toy>=self.y:
                 GameDebug(StringBuilder("Pawn: MoveCheck: Pawn cannot move backwards"))
                 return False
@@ -458,12 +468,14 @@ class Pawn(Piece):
                         if getPiece(self.x-1,self.y-1).getcharacter()[1]=="P":
                             if getPiece(self.x-1,self.y-1).gethasMoved()==True:
                                 GameDebug(StringBuilder("White Pawn: MoveCheck: En Passant Success Left"))
+                                self.enPassant=True
                                 return True
                 if getPiece(self.x+1,self.y-1).getcharacter()!="++":
                     if getPiece(self.x+1,self.y-1).getcolor()!=self.color:
                         if getPiece(self.x+1,self.y-1).getcharacter()[1]=="P":
                             if getPiece(self.x+1,self.y-1).gethasMoved()==True:
                                 GameDebug(StringBuilder("White Pawn: MoveCheck: En Passant Success Right"))
+                                self.enPassant=True
                                 return True
 
             if toy<=self.y:
@@ -956,9 +968,7 @@ def Blocking(item, color):
     while (attacker_x != king_x and attacker_y != king_y):
 
         GameDebug(StringBuilder("Adding Piece: ", attacker_x, " ", attacker_y))
-        # emptylist.append([getPiece(attacker_x, attacker_y), attacker_x, attacker_y])
         emptylist.append({"Piece": getPiece(attacker_x, attacker_y), "x": attacker_x, "y": attacker_y})
-        # GameDebug(StringBuilder("Empty Character: ", emptylist[-1].getcharacter(), " ", emptylist[-1].getx(), " ", emptylist[-1].gety()))
         attacker_x -= change_x
         attacker_y -= change_y
 
@@ -1004,6 +1014,7 @@ def Blocking(item, color):
             GameDebug("Defender List")
             for defender in defenderList:
                 GameDebug(StringBuilder("Defender: ", defender.getcharacter(), " ", defender.getx(), " ", defender.gety()))
+                defender.spider()
             return 0
         else:
             GameDebug("Checkmate")
@@ -1017,16 +1028,22 @@ def Blocking(item, color):
     #If they do, then the king is not in checkmate
 
 def Checkmate(color):
+        GameDebug("Checking: " + color + "King")
         #exitLoop being false means that the King is able to move
         #exitLoop being true means that the King is unable to move
-        opposite = "B" if (color=="W")  else "W"
-        checklist = inCheck(color).getAttacker()
         exitLoop = False
+        checklist = inCheck(color).getAttacker()
         if len(checklist)!=0:
             #if there is items in the list
             GameDebug("Check")
             counter = 0
-            while not (counter < len(checklist) and not exitLoop):
+            for item in checklist:
+                GameDebug(StringBuilder("The item is: ", item.getcharacter()))
+
+            #I need to work out what correct condition(s) are for this while loop
+            # if the counter is not less than the length of the checklist or the exitLoop variable is true then break
+            # while we havent reached the end of the list and we aren't exiting the loop
+            while (counter < len(checklist)):
                 item = checklist[counter]
                 #For every item that can attack the king
 
@@ -1040,13 +1057,15 @@ def Checkmate(color):
                     GameDebug("Attackers found")
                     for attacker in attackinglist:
                         GameDebug("The piece attacking the " + item.getcharacter()+ " is " + attacker.getcharacter())
-                    exitLoop = True
+                    exitLoop = False
                 else:
                     #Check for blockers
                     exitLoop = Blocking(item, color)
                 counter +=1
+            #If exitLoop is true then that means that we have found a way to prevent the check, if it is false there is no way?
         else:
             GameDebug("There is no piece checking the king")
+        GameDebug(StringBuilder("The Exit Code Here is ", exitLoop))
         return exitLoop
 
 def main():
