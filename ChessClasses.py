@@ -417,29 +417,32 @@ class Pawn(Piece):
     def movecheck(self, tox, toy):
         #check if the pawn is moving in the correct direction
         GameDebug("--- Pawn: MoveCheck ---")
-        if self.x !=tox:
-            GameDebug("Pawn cannot move sideways")
+        if self.x !=tox and self.y != toy and abs(tox-self.x)==1 and abs(toy-self.y)==1:
+            #if we are taking
+            GameDebug("Attempting to take")
+            if getPiece(tox, toy).color != self.color and getPiece(tox, toy).getcharacter() != "++":
+                GameDebug("The Pawn is trying to take the opposite color")
+                return True
             return False
+
 
         if self.color=="W":
             #piece is white
             GameDebug("White")
             if toy==self.y-1 and getPiece(self.x,self.y-1).getcharacter()!="++":
                 #check for en passant
-                if getPiece(self.x-1,self.y-1).getcharacter()!="++":
-                    if getPiece(self.x-1,self.y-1).getcolor()!=self.color:
-                        if getPiece(self.x-1,self.y-1).getcharacter()[1]=="P":
-                            if getPiece(self.x-1,self.y-1).gethasMoved()==True:
-                                GameDebug(StringBuilder("White Pawn: MoveCheck: En Passant Success Left"))
-                                self.enPassant= True
-                                return True
-                if getPiece(self.x+1,self.y-1).getcharacter()!="++":
-                    if getPiece(self.x+1,self.y-1).getcolor()!=self.color:
-                        if getPiece(self.x+1,self.y-1).getcharacter()[1]=="P":
-                            if getPiece(self.x+1,self.y-1).gethasMoved()==True:
-                                GameDebug(StringBuilder("White Pawn: MoveCheck: En Passant Success Right"))
-                                self.enPassant=True
-                                return True
+                enPassantPiece = getPiece(self.x-1, self.y-1)
+                if enPassantPiece.getcharacter()!="++" and enPassantPiece.getcolor()!=self.color:
+                    if enPassantPiece.getcharacter()[1]=="P" and enPassantPiece.gethasMoved()==True:
+                        GameDebug(StringBuilder("White Pawn: MoveCheck: En Passant Success Left"))
+                        self.enPassant= True
+                        return True
+                enPassantPiece = getPiece(self.x+1, self.y-1)
+                if enPassantPiece.getcharacter()!="++" and enPassantPiece.getcolor()!=self.color:
+                    if enPassantPiece.getcharacter()[1]=="P" and enPassantPiece.gethasMoved()==True:
+                        GameDebug(StringBuilder("White Pawn: MoveCheck: En Passant Success Right"))
+                        self.enPassant=True
+                        return True
 
             GameDebug(StringBuilder("White Pawn: MoveCheck: ", toy, " to ", self.y))
             GameDebug(StringBuilder("White Pawn: MoveCheck: ", tox, " to ", self.x))
@@ -463,20 +466,16 @@ class Pawn(Piece):
             GameDebug("Black")
             if toy==self.y-1 and getPiece(self.x,self.y-1)!="++":
                 #check for en passant
-                if getPiece(self.x-1,self.y-1).getcharacter()!="++":
-                    if getPiece(self.x-1,self.y-1).getcolor()!=self.color:
-                        if getPiece(self.x-1,self.y-1).getcharacter()[1]=="P":
-                            if getPiece(self.x-1,self.y-1).gethasMoved()==True:
-                                GameDebug(StringBuilder("White Pawn: MoveCheck: En Passant Success Left"))
-                                self.enPassant=True
-                                return True
-                if getPiece(self.x+1,self.y-1).getcharacter()!="++":
-                    if getPiece(self.x+1,self.y-1).getcolor()!=self.color:
-                        if getPiece(self.x+1,self.y-1).getcharacter()[1]=="P":
-                            if getPiece(self.x+1,self.y-1).gethasMoved()==True:
-                                GameDebug(StringBuilder("White Pawn: MoveCheck: En Passant Success Right"))
-                                self.enPassant=True
-                                return True
+                if getPiece(self.x-1,self.y-1).getcharacter()!="++" and getPiece(self.x-1,self.y-1).getcolor()!=self.color:
+                    if getPiece(self.x-1,self.y-1).getcharacter()[1]=="P" and getPiece(self.x-1,self.y-1).gethasMoved()==True:
+                        GameDebug(StringBuilder("White Pawn: MoveCheck: En Passant Success Left"))
+                        self.enPassant=True
+                        return True
+                if getPiece(self.x+1,self.y-1).getcharacter()!="++" and getPiece(self.x+1,self.y-1).getcolor()!=self.color:
+                    if getPiece(self.x+1,self.y-1).getcharacter()[1]=="P" and getPiece(self.x+1,self.y-1).gethasMoved()==True:
+                        GameDebug(StringBuilder("White Pawn: MoveCheck: En Passant Success Right"))
+                        self.enPassant=True
+                        return True
 
             if toy<=self.y:
                 GameDebug(StringBuilder("Pawn: MoveCheck: Pawn cannot move backwards"))
@@ -981,8 +980,8 @@ def Blocking(item, color):
         GameDebug(StringBuilder("Empty: ", empty.getcharacter(), " ", emptylist[i]["x"], " ", emptylist[i]["y"]))
         possibleMoves = empty.spider()
         if len(possibleMoves)!=0:
-            for i in range(len(possibleMoves)):
-                possible = possibleMoves[i]
+            for j in range(len(possibleMoves)):
+                possible = possibleMoves[j]
                 #Once we have this list, we need to check if it can block
                 if possible.getcolor() == color:
                     GameDebug("Opposite Color: " + possible.getcharacter() + " This piece can move to " + str(possible.getx()) + " " + str(possible.gety()) + " from " + str(emptylist[i]["x"]) + " " + str(emptylist[i]["y"]))
