@@ -698,6 +698,21 @@ class King(Piece):
             return False
         return True
 
+    def getMoveableList(self):
+        offset = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1),  (1, 0),  (1, 1)]
+        moveableList = []
+
+        for dx,dy in offset:
+            x = self.x + dx
+            y = self.y + dy
+            if self.tempConfig(x,y):
+                possibleMove = getPiece(x,y)
+                GameDebug(StringBuilder("GetMoveableList: Testing ", x, y))
+                if possibleMove.getcharacter()=="++":
+                    moveableList.append({"Piece": possibleMove, "x": x, "y": y})
+
+        return moveableList
+
 class Empty(Piece):
     def __init__(self, x, y, color):
         super().__init__("+",0, x, y, color)
@@ -981,18 +996,24 @@ def Checkmate(color):
         exitLoop = False
         checklist = inCheck(color).getAttacker()
         if len(checklist)!=0:
-            #if there is items in the list
+            #if there is items in the list the king is in check
             GameDebug("Check")
             counter = 0
             for item in checklist:
                 GameDebug(StringBuilder("The item is: ", item.getcharacter()))
+            #Check if the king can get out just by moving
+            
 
-            #I need to work out what correct condition(s) are for this while loop
-            # if the counter is not less than the length of the checklist or the exitLoop variable is true then break
-            # while we havent reached the end of the list and we aren't exiting the loop
             while (counter < len(checklist)):
                 item = checklist[counter]
                 #For every item that can attack the king
+                if not exitLoop:
+                    GameDebug("Since Blocking didn't work, perhaps the king can move")
+                    #There was nothing that could block
+                    #Perhaps the king can move
+                    #Find out if the king can move
+                    kingMoves = inCheck(color).getMoveableList()
+
 
                 GameDebug("The piece checking the king is " + item.getcharacter())
                 #Work out if we are able to avoid the check (whether by blocking or capturing the piece)
@@ -1008,6 +1029,8 @@ def Checkmate(color):
                 else:
                     #Check for blockers
                     exitLoop = Blocking(item, color)
+
+
                 counter +=1
             #If exitLoop is true then that means that we have found a way to prevent the check, if it is false there is no way?
         else:
