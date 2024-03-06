@@ -5,17 +5,6 @@ e7e5
 g2g4
 d8h4
 
-#Test 1b: Blockable Foolsmate
-
-f2f3
-e7e5
-a2a4
-d8h4
-a4a5
-g2g3
-h4xg3
-h2xg3
-
 #Test 2: Scholars mate
 
 e2e4

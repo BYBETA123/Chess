@@ -731,22 +731,6 @@ class King(Piece):
                         #The square is moveable
                         GameDebug(StringBuilder("There is a square to move to"))
                         return False
-                    # tempList = possibleMove.getAttacker()
-                    # finalList = copy.copy(tempList)
-                    # for temp in tempList:
-                    #     GameDebug(StringBuilder("Trialling: ", temp.getcharacter()))
-                    #     GameDebug(StringBuilder("Self: ", self.color, " Piece: ", temp.getcolor(), " and this comparison is ", self.color == temp.getcolor()))
-                    #     if temp.color == self.color:
-                    #         GameDebug(StringBuilder("GetMoveableList: Testing ",temp.getcharacter()," ", x," ", y))
-                    #     else:
-                    #         GameDebug(StringBuilder("Removing: ", temp.getcharacter() ))
-                    #         finalList.remove(temp)
-                    # for final in finalList:
-                    #     GameDebug(StringBuilder("The pieces that can't attack the king are: ", final.getcharacter()))
-                    # GameDebug(StringBuilder("The resulting array has ", len(finalList), " element(s)"))
-                    # if len(finalList)!=0:
-                    #     GameDebug(StringBuilder("There is a move avaliable"))
-                    #     return False
         GameDebug("GetMoveableList: King Can't Move")
         return True
 
@@ -994,6 +978,10 @@ def Blocking(item, color):
 
         for new in newpossible:
             GameDebug(StringBuilder("Piece: ", new["Piece"].getcharacter(), " ", new["x"], " ", new["y"]))
+            if new["Piece"].movecheck(new["x"],new["y"],False):
+                #If false, we can break
+                GameDebug("The Piece found isn't able to move there")
+                break
             # Check if this move prevents the attack
             pieceFrom = new["Piece"]
             pieceTo = getPiece(new["x"], new["y"])
