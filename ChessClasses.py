@@ -105,13 +105,16 @@ class Piece:
         checklist=[]
         #Places to check:
 
-        #If its a king
-        # offset = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1),  (1, 0),  (1, 1)]
+        # If its a king
+        offset = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1),  (1, 0),  (1, 1)]
 
-        # for dx,dy in offset:
-        #     x = self.x + dx
-        #     y = self.y + dy
-        #     GameDebug("")
+        for dx,dy in offset:
+            x = self.x + dx
+            y = self.y + dy
+            if not self.tempConfig(x,y):
+                if getPiece(x, y).getcharacter()[1]=="K":
+                    GameDebug(StringBuilder("Attacking Piece Found at ", x, " ", y, " and is a ", getPiece(x,y).getcharacter()))
+                    checklist.append(getPiece(x,y))
 
 
         #Up
@@ -272,6 +275,7 @@ class Piece:
         if self.tempConfig(self.x+2,self.y-1)==False:
             if getPiece(self.x+2,self.y-1).getcharacter()[1]=="&" and getPiece(self.x+2, self.y-1).getcolor() != self.color:
                 GameDebug("Attacking Piece Found +2 -1: " + getPiece(self.x+2,self.y-1).getcharacter())
+                GameDebug(StringBuilder("The location is ", self.x+2, " ", self.y-1))
                 checklist.append(getPiece(self.x+2,self.y-1))
         if self.tempConfig(self.x-2,self.y+1)==False:
             if getPiece(self.x-2,self.y+1).getcharacter()[1]=="&" and getPiece(self.x-2, self.y+1).getcolor() != self.color:
@@ -717,8 +721,16 @@ class King(Piece):
                     #If there is an empty square, see if we can move there
                     GameDebug(StringBuilder("There is a square at ", x, " ", y))
                     tempList = possibleMove.getAttacker()
+                    movinglist = []
                     for temp in tempList:
-                        GameDebug(StringBuilder("The Piece: ", temp.getcharacter(), " ", temp.getx(), " ", temp.gety()))
+                        if temp.getcolor() != self.color:
+                            GameDebug(StringBuilder("The Piece: ", temp.getcharacter(), " ", temp.getx(), " ", temp.gety()))
+                            #If this is true, then we have a piece that can take on that square so there are no moves
+                            movinglist.append(temp)
+                    if len(movinglist)==0:
+                        #The square is moveable
+                        GameDebug(StringBuilder("There is a square to move to"))
+                        return False
                     # tempList = possibleMove.getAttacker()
                     # finalList = copy.copy(tempList)
                     # for temp in tempList:
@@ -1036,7 +1048,11 @@ def Checkmate(color):
                 GameDebug("The piece checking the king is " + item.getcharacter())
                 #Work out if we are able to avoid the check (whether by blocking or capturing the piece)
                 item.spider()
-                attackinglist = item.getAttacker() #Find out if the piece can be attacked
+                templist = item.getAttacker() #Find out if the piece can be attacked
+                attackinglist = []
+                for temp in templist:
+                    if temp.getcharacter()[1] != "K":
+                        attackinglist.append(temp)
                 if len(attackinglist)!=0:
                     #If the list is non-zero then we have something that can capture it
                     #Check the case for where the attacking piece is actually blocking a check
