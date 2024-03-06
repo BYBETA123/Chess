@@ -105,6 +105,15 @@ class Piece:
         checklist=[]
         #Places to check:
 
+        #If its a king
+        # offset = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1),  (1, 0),  (1, 1)]
+
+        # for dx,dy in offset:
+        #     x = self.x + dx
+        #     y = self.y + dy
+        #     GameDebug("")
+
+
         #Up
         tempy=self.y
         tempx=self.x
@@ -456,8 +465,6 @@ class Pawn(Piece):
                 return True
 
             GameDebug("Nothing was hit?")
-            GameDebug(StringBuilder(self.hasMoved))
-            GameDebug("I'm here")
             return False
 
         if self.color=="B":
@@ -700,18 +707,36 @@ class King(Piece):
 
     def getMoveableList(self):
         offset = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1),  (1, 0),  (1, 1)]
-        moveableList = []
 
         for dx,dy in offset:
             x = self.x + dx
             y = self.y + dy
-            if self.tempConfig(x,y):
+            if not self.tempConfig(x,y):
                 possibleMove = getPiece(x,y)
-                GameDebug(StringBuilder("GetMoveableList: Testing ", x, y))
                 if possibleMove.getcharacter()=="++":
-                    moveableList.append({"Piece": possibleMove, "x": x, "y": y})
-
-        return moveableList
+                    #If there is an empty square, see if we can move there
+                    GameDebug(StringBuilder("There is a square at ", x, " ", y))
+                    tempList = possibleMove.getAttacker()
+                    for temp in tempList:
+                        GameDebug(StringBuilder("The Piece: ", temp.getcharacter(), " ", temp.getx(), " ", temp.gety()))
+                    # tempList = possibleMove.getAttacker()
+                    # finalList = copy.copy(tempList)
+                    # for temp in tempList:
+                    #     GameDebug(StringBuilder("Trialling: ", temp.getcharacter()))
+                    #     GameDebug(StringBuilder("Self: ", self.color, " Piece: ", temp.getcolor(), " and this comparison is ", self.color == temp.getcolor()))
+                    #     if temp.color == self.color:
+                    #         GameDebug(StringBuilder("GetMoveableList: Testing ",temp.getcharacter()," ", x," ", y))
+                    #     else:
+                    #         GameDebug(StringBuilder("Removing: ", temp.getcharacter() ))
+                    #         finalList.remove(temp)
+                    # for final in finalList:
+                    #     GameDebug(StringBuilder("The pieces that can't attack the king are: ", final.getcharacter()))
+                    # GameDebug(StringBuilder("The resulting array has ", len(finalList), " element(s)"))
+                    # if len(finalList)!=0:
+                    #     GameDebug(StringBuilder("There is a move avaliable"))
+                    #     return False
+        GameDebug("GetMoveableList: King Can't Move")
+        return True
 
 class Empty(Piece):
     def __init__(self, x, y, color):
@@ -872,6 +897,7 @@ def GetMove(color):
         GameDebug(StringBuilder("GetMove: Invalid Move: ",move))
         move=input("Invalid Move, Try Again: ")
     MakeMove(move,len(move))
+    PrintBoard() #Just so we get the updated board
     GameDebug(StringBuilder("GetMove: Move Made: ",move))
 
 def inCheck(color):
@@ -946,7 +972,7 @@ def Blocking(item, color):
             for j in range(len(possibleMoves)):
                 possible = possibleMoves[j]
                 #Once we have this list, we need to check if it can block
-                if possible.getcolor() == color:
+                if possible.getcolor() == color and possible.getcharacter()[1]!="K":
                     GameDebug("Opposite Color: " + possible.getcharacter() + " This piece can move to " + str(possible.getx()) + " " + str(possible.gety()) + " from " + str(emptylist[i]["x"]) + " " + str(emptylist[i]["y"]))
                     newpossible.append({"Piece": possible, "x": emptylist[i]["x"], "y": emptylist[i]["y"]})
         else:
@@ -1006,14 +1032,6 @@ def Checkmate(color):
 
             while (counter < len(checklist)):
                 item = checklist[counter]
-                #For every item that can attack the king
-                if not exitLoop:
-                    GameDebug("Since Blocking didn't work, perhaps the king can move")
-                    #There was nothing that could block
-                    #Perhaps the king can move
-                    #Find out if the king can move
-                    kingMoves = inCheck(color).getMoveableList()
-
 
                 GameDebug("The piece checking the king is " + item.getcharacter())
                 #Work out if we are able to avoid the check (whether by blocking or capturing the piece)
@@ -1029,7 +1047,13 @@ def Checkmate(color):
                 else:
                     #Check for blockers
                     exitLoop = Blocking(item, color)
-
+                    #For every item that can attack the king
+                    if exitLoop:
+                        GameDebug("Since Blocking didn't work, perhaps the king can move")
+                        #There was nothing that could block
+                        #Perhaps the king can move
+                        #Find out if the king can move
+                        exitLoop = inCheck(color).getMoveableList()
 
                 counter +=1
             #If exitLoop is true then that means that we have found a way to prevent the check, if it is false there is no way?
